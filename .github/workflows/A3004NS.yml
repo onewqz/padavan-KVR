@@ -37,10 +37,10 @@ jobs:
         mkdir -p /opt/images/
         
         ##### 修改内存空间和 storage空间6m
-        sed -i 's/SIZ=0x80000/SIZ=0x500000/g' /opt/rt-n56u/trunk/configs/boards/K2P/kernel-3.4.x-5.0.config
-        sed -i 's/size_etc="6M"/size_etc="5M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
-        sed -i 's/size_tmp="24M"/size_tmp="30M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
-        sed -i 's/mtd_part_size=65536/mtd_part_size=5242880/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
+        #sed -i 's/SIZ=0x80000/SIZ=0x500000/g' /opt/rt-n56u/trunk/configs/boards/K2P/kernel-3.4.x-5.0.config
+        #sed -i 's/size_etc="6M"/size_etc="5M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
+        #sed -i 's/size_tmp="24M"/size_tmp="30M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
+        #sed -i 's/mtd_part_size=65536/mtd_part_size=5242880/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
     - name: Build Firmware
       env:
         TNAME: A3004NS
@@ -435,7 +435,7 @@ jobs:
         #########################################################################################
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
-        sudo mv -f images/MI-R3P_3.4.3.9-099.trx /opt/images/MI-R3P-breed_3.4.3.9-099.trx
+        sudo mv -f images/A3004NS_3.4.3.9-099.trx /opt/images/A3004NS_3.4.3.9-099.trx
         cp -f .config /opt/images/${TNAME}.config
         echo "build_time=$(date '+%Y年%m月%d日%H:%M:%S' | jq -sRr @uri)" >> $GITHUB_ENV
         echo "tag=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
@@ -443,7 +443,7 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: MI-R3P-breed
+        name: A3004NS
         path: /opt/images
 
     - name: Release
