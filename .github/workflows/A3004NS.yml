@@ -9,7 +9,7 @@ env:
   TZ: Asia/Shanghai
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
@@ -20,12 +20,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -y install unzip libtool-bin curl cmake gperf gawk flex bison nano xxd fakeroot \
-        cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
+        cpio git python3-docutils gettext automake autopoint texinfo build-essential help2man \
         pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
     - name: Install UPX
       uses: crazy-max/ghaction-upx@v3
       with:
-        version: latest
+        version: v4.2.4
         install-only: true
     - name: Clone source code
       env:
@@ -36,11 +36,11 @@ jobs:
         sh dl_toolchain.sh
         mkdir -p /opt/images/
         
-        ##### 修改内存空间和 storage空间9m
-        #sed -i 's/SIZ=0x0400000/SIZ=0x0900000/g' /opt/rt-n56u/trunk/configs/boards/A3004NS/kernel-3.4.x.config
-        #sed -i 's/size_etc="6M"/size_etc="9M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
+        ##### 修改内存空间和 storage空间8m
+        #sed -i 's/SIZ=0x0400000/SIZ=0x0800000/g' /opt/rt-n56u/trunk/configs/boards/A3004NS/kernel-3.4.x-breed.config
+        #sed -i 's/size_etc="6M"/size_etc="8M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
         #sed -i 's/size_tmp="24M"/size_tmp="120M"/g' /opt/rt-n56u/trunk/user/scripts/dev_init.sh
-        #sed -i 's/mtd_part_size=65536/mtd_part_size=9437184/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
+        #sed -i 's/mtd_part_size=65536/mtd_part_size=8388608/g' /opt/rt-n56u/trunk/user/scripts/mtd_storage.sh
     - name: Build Firmware
       env:
         TNAME: A3004NS
@@ -306,10 +306,10 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_TRANSMISSION_WEB_CONTROL=n" >> .config
 
         ##包含 Aria2 下载管理器。openssl 约 1.2MB，aria2 约 3.5MB
-        echo "CONFIG_FIRMWARE_INCLUDE_ARIA=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_ARIA=n" >> .config
 
         ##包含 Aria2 WEB 控制界面。约 0.7MB。
-        echo "CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=y" >> .config
+        echo "CONFIG_FIRMWARE_INCLUDE_ARIA_WEB_CONTROL=n" >> .config
 
         
 
@@ -436,7 +436,7 @@ jobs:
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
         sudo mv -f images/A3004NS_3.4.3.9-099.trx /opt/images/A3004NS_3.4.3.9-099.trx
-        cp -f .config /opt/images/${TNAME}.config
+        cp -f .config /opt/images/${TNAME}_pb-boot.config
         echo "build_time=$(date '+%Y年%m月%d日%H:%M:%S' | jq -sRr @uri)" >> $GITHUB_ENV
         echo "tag=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
     - name : Upload packages
