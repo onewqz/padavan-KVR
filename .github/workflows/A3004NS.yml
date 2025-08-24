@@ -436,7 +436,7 @@ jobs:
         sudo ./clear_tree
         sudo ./build_firmware_modify $TNAME 0
         sudo mv -f images/A3004NS_3.4.3.9-099.trx /opt/images/A3004NS_3.4.3.9-099.trx
-        cp -f .config /opt/images/${TNAME}_pb-boot.config
+        cp -f .config /opt/images/${TNAME}.config
         echo "build_time=$(date '+%Y年%m月%d日%H:%M:%S' | jq -sRr @uri)" >> $GITHUB_ENV
         echo "tag=$(date '+%Y-%m-%d')" >> $GITHUB_ENV
     - name : Upload packages
